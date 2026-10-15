@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10152b">
+<title>WEB TIME — путешествие по истории интернета</title>
+<style>
+:root{--bg:#0b1020;--panel:#141b31;--panel2:#1a2440;--text:#f4f6ff;--muted:#9da9c7;--cyan:#5ee7f5;--violet:#9c8cff;--gold:#ffd166;--green:#78f0b3;--line:#2b3657}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#202856 0,transparent 40%),radial-gradient(ellipse at 100% 20%,#241d50 0,transparent 35%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px clamp(14px,4vw,48px);border-bottom:1px solid #ffffff14;background:#0b1020c9;position:sticky;top:0;z-index:5;backdrop-filter:blur(16px)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.1em}.logo-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--cyan),var(--violet));color:#0b1020;font-size:21px}
+.top-actions{display:flex;align-items:center;gap:10px}.pill{padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:13px}.small-btn,.secondary{background:#ffffff08;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:9px 12px}
+main{max-width:1180px;margin:auto;padding:32px clamp(14px,4vw,48px) 60px}
+.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:24px;align-items:center;padding:clamp(22px,4vw,42px);border:1px solid #8f9bff30;border-radius:28px;background:linear-gradient(120deg,#172342e8,#171631e8);box-shadow:0 25px 70px #0002;overflow:hidden;position:relative}
+.eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.18em;text-transform:uppercase;font-size:12px}.hero h1{font-size:clamp(36px,6vw,68px);line-height:.98;letter-spacing:-.055em;margin:12px 0 18px}.hero h1 span{color:var(--cyan)}.hero p{color:#c1c9e2;line-height:1.65;max-width:620px;margin:0}.hero-art{min-height:210px;display:grid;place-items:center;position:relative}.orbit{width:min(100%,280px);aspect-ratio:1;border:1px solid #5ee7f54a;border-radius:50%;display:grid;place-items:center;position:relative;box-shadow:0 0 70px #5ee7f512,inset 0 0 50px #9c8cff12}.orbit:before,.orbit:after{content:"";position:absolute;border:1px solid #9c8cff65;border-radius:50%;inset:16%;transform:rotateX(65deg) rotateZ(30deg)}.orbit:after{inset:28%;transform:rotateX(65deg) rotateZ(-35deg);border-color:#5ee7f566}.planet{font-size:clamp(70px,10vw,112px);filter:drop-shadow(0 0 25px #5ee7f588);z-index:1}.orbit-label{position:absolute;bottom:6%;right:-2%;background:#0d1428;border:1px solid var(--line);border-radius:12px;padding:10px 13px;font-size:12px;color:var(--cyan)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 30px}.stat{border:1px solid var(--line);border-radius:16px;background:#121a2e;padding:15px 18px}.stat b{font-size:23px;display:block}.stat span{font-size:12px;color:var(--muted)}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:32px 0 16px}.section-head h2{font-size:clamp(22px,3vw,30px);margin:0;letter-spacing:-.03em}.section-head p{margin:6px 0 0;color:var(--muted);font-size:14px}.progress-wrap{min-width:150px}.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:8px}.progress{height:8px;background:#29324c;border-radius:99px;overflow:hidden}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:99px;transition:width .3s}
+.timeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.era{min-width:0;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:19px;background:linear-gradient(160deg,#19223a,#11182a);padding:17px;transition:transform .2s,border-color .2s}.era:not(.locked):hover{transform:translateY(-3px);border-color:#5ee7f58a}.era.locked{opacity:.55}.era-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.year{font-size:26px;font-weight:900;letter-spacing:-.05em}.status{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 8px;white-space:nowrap}.era-art{height:92px;display:grid;place-items:center;font-size:52px;margin:7px 0 3px;background:radial-gradient(ellipse,#5ee7f51b,transparent 70%);border-radius:12px}.era h3{margin:7px 0 6px;font-size:17px}.era p{font-size:13px;line-height:1.5;color:var(--muted);min-height:57px;margin:0 0 14px}.era .enter{width:100%;border:0;border-radius:11px;padding:11px 12px;font-weight:800;color:#091021;background:linear-gradient(100deg,var(--cyan),#a8a0ff)}.era .enter:disabled{background:#29324c;color:#8590ad;cursor:not-allowed}
+.quest-note{margin-top:25px;padding:18px 20px;border-radius:17px;background:#10182b;border:1px solid var(--line);display:flex;gap:14px;align-items:flex-start}.quest-note .bulb{font-size:24px}.quest-note p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+footer{border-top:1px solid #ffffff12;padding:20px;text-align:center;color:#7e8aaa;font-size:12px}
+.overlay{position:fixed;inset:0;z-index:20;background:#050813d9;backdrop-filter:blur(9px);display:none;align-items:center;justify-content:center;padding:14px}.overlay.show{display:flex}.modal{width:min(900px,100%);max-height:94vh;overflow:auto;background:#10172a;border:1px solid #46517a;border-radius:22px;box-shadow:0 30px 100px #0009}.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--line)}.modal-head strong{font-size:14px}.close{border:1px solid var(--line);background:#ffffff08;color:white;border-radius:10px;padding:8px 12px}.browser{margin:18px;border-radius:13px;overflow:hidden;background:#f4f1e8;color:#182033;min-height:310px}.browserbar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#dce1e8;color:#27334a;font-size:12px}.dots{display:flex;gap:4px}.dots i{width:8px;height:8px;background:#f47d80;border-radius:50%}.dots i:nth-child(2){background:#eac15e}.dots i:nth-child(3){background:#65c995}.address{flex:1;background:#f8fafc;border-radius:6px;padding:6px 9px;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.site-content{padding:clamp(16px,4vw,32px);min-height:260px}.site-content h2{font-size:clamp(24px,5vw,38px);margin:0 0 12px}.site-content p{line-height:1.55}.quest-box{margin:0 18px 18px;padding:16px;border:1px solid var(--line);border-radius:13px;background:#151e34}.quest-box h3{margin:0 0 6px}.quest-box p{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 12px}.quest-actions{display:flex;gap:8px;flex-wrap:wrap}.quest-actions button{border:1px solid #3d4c71;background:#202c48;color:#f5f7ff;border-radius:9px;padding:10px 12px}.quest-actions button:hover{border-color:var(--cyan)}.quest-actions .done{background:var(--green);color:#071a16;border-color:var(--green);font-weight:800}.tiny{font-size:11px;color:var(--muted);margin-top:10px}
+.toast{position:fixed;z-index:40;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#e8fff5;color:#09221a;border-radius:12px;padding:12px 18px;font-weight:800;box-shadow:0 12px 40px #0006;transition:.25s;max-width:calc(100vw - 28px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:850px){.timeline{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr .55fr}.hero-art{min-height:170px}.orbit-label{right:-8%}}
+@media(max-width:560px){.topbar{padding:12px}.logo{font-size:13px}.pill{display:none}main{padding-top:18px}.hero{grid-template-columns:1fr;padding:22px}.hero-art{min-height:130px;grid-row:1}.orbit{width:145px}.planet{font-size:62px}.orbit-label{font-size:10px;right:-35px}.stats{gap:7px}.stat{padding:12px}.stat b{font-size:20px}.stat span{font-size:10px}.section-head{align-items:start;flex-direction:column}.progress-wrap{width:100%}.timeline{gap:10px}.era{padding:12px}.year{font-size:23px}.status{font-size:9px;padding:4px 6px}.era-art{height:70px;font-size:42px}.era h3{font-size:15px}.era p{font-size:12px;min-height:68px}.era .enter{font-size:12px;padding:10px 5px}.browser{margin:10px}.quest-box{margin:0 10px 10px}.site-content{padding:17px}.modal-head{padding:12px}}
+/* Historical mock websites */
+.site-1991{font-family:Georgia,serif;background:#fff;color:#111}.site-1991 h2{font-family:Georgia,serif;font-weight:normal}.site-1991 a{color:#00e;text-decoration:underline}
+.site-1996{background:#08006b;color:#ffff00;font-family:"Times New Roman",serif;text-align:center}.site-1996 h2{font-size:34px;text-shadow:3px 3px #f0f}.site-1996 .retro-box{border:4px ridge #ddd;background:#160e92;padding:15px}
+.site-2000{background:#f4f4f4;color:#222;font-family:Arial,sans-serif}.site-2000 h2{background:#164d87;color:#fff;padding:12px;font-size:27px}.site-2000 .retro-box{border:1px solid #aaa;background:#fff;padding:12px}
+.site-2005{background:#f6f6f6;color:#222;font-family:Arial,sans-serif}.site-2005 h2{color:#2864a4}.site-2005 .retro-box{background:white;border:1px solid #ddd;padding:14px;box-shadow:0 1px 2px #ddd}
+.site-2010{background:#fff;color:#333;font-family:Arial,sans-serif}.site-2010 h2{color:#cc181e}.site-2010 .retro-box{background:#f4f4f4;padding:14px;border-radius:3px}
+.site-2015{background:#fafafa;color:#222;font-family:Arial,sans-serif}.site-2015 h2{font-weight:500}.site-2015 .retro-box{background:white;border:1px solid #e5e5e5;border-radius:4px;padding:14px}
+.site-2020{background:#fff;color:#242424;font-family:Arial,sans-serif}.site-2020 h2{font-size:28px}.site-2020 .retro-box{background:#f1f3f4;border-radius:12px;padding:16px}
+.site-2025{background:#10131b;color:#f4f6ff;font-family:Inter,Arial,sans-serif}.site-2025 h2{background:linear-gradient(90deg,#7c5cff,#36d9ef);background-clip:text;color:transparent}.site-2025 .retro-box{background:#1b2130;border:1px solid #333d54;border-radius:14px;padding:16px}
+
+/* 2026 unified lobby, store and journal */
+.lobby{margin:20px 0 30px;border:1px solid #48558a;border-radius:24px;overflow:hidden;background:linear-gradient(135deg,#19264a,#17182f 60%,#142d3a);box-shadow:0 18px 60px #0003}
+.lobby-banner{padding:22px clamp(16px,3vw,28px);display:flex;justify-content:space-between;align-items:center;gap:18px;background:radial-gradient(circle at 85% 20%,#5ee7f528,transparent 35%)}
+.lobby-kicker{font-size:11px;letter-spacing:.2em;font-weight:900;color:var(--cyan)}.lobby h2{margin:7px 0;font-size:clamp(25px,4vw,38px);letter-spacing:-.04em}.lobby-banner p{margin:0;color:#b6c3e2;line-height:1.5;font-size:14px;max-width:650px}
+.wallet{flex-shrink:0;padding:13px 16px;border:1px solid #ffd16666;background:#ffd16612;border-radius:15px;text-align:center}.wallet b{display:block;color:var(--gold);font-size:25px}.wallet span{font-size:11px;color:#e7d5a3}
+.lobby-body{padding:0 clamp(14px,3vw,28px) 24px}.lobby-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end;padding:17px 0;border-top:1px solid #ffffff16}
+.year-picker label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}.year-picker select{width:100%;max-width:330px;background:#0d1529;color:var(--text);border:1px solid #3b496f;border-radius:11px;padding:12px}
+.lobby-button{border:0;border-radius:11px;padding:12px 17px;background:linear-gradient(100deg,var(--cyan),#a8a0ff);color:#071021;font-weight:900}.lobby-section-title{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:18px 0 12px}.lobby-section-title h3{font-size:18px;margin:0}.lobby-section-title span{font-size:12px;color:var(--muted)}
+.store-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.store-card{padding:15px;border-radius:15px;border:1px solid #354265;background:#10182d;min-width:0}.store-icon{height:72px;display:grid;place-items:center;font-size:42px;background:radial-gradient(ellipse,#9c8cff24,transparent 70%);border-radius:10px}.store-card h4{margin:9px 0 5px;font-size:15px}.store-card p{margin:0 0 12px;color:var(--muted);font-size:12px;line-height:1.45;min-height:34px}.price-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.price{font-size:13px;font-weight:900;color:var(--gold)}.buy-btn{border:1px solid #53658e;background:#222e4c;color:#fff;border-radius:9px;padding:8px 10px;font-size:12px;font-weight:800}.buy-btn:hover{border-color:var(--cyan)}.buy-btn:disabled{opacity:.4;cursor:not-allowed}
+.secret-quests{margin-top:18px;padding:16px;border:1px dashed #7b6acb;border-radius:16px;background:linear-gradient(135deg,#211b3b,#11182b)}.secret-quests h3{margin:0}.secret-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.secret-card{border:1px solid #4a416e;border-radius:12px;padding:12px;background:#17142a}.secret-card.found{border-color:#5ee7a0;background:#123026}.secret-card strong{display:block;margin-bottom:5px}.secret-card p{font-size:12px;color:var(--muted);margin:0 0 8px;line-height:1.45}.secret-status{font-size:11px;color:var(--cyan);font-weight:900}@media(max-width:700px){.secret-list{grid-template-columns:1fr}}.journal{margin-top:18px;padding:16px;border:1px solid #354265;border-radius:16px;background:#10182d}.journal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.journal-head h3{margin:0;font-size:18px}.journal-count{font-size:12px;color:var(--muted)}.journal-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:13px}.journal-card{min-width:0;border-radius:12px;border:1px solid #465276;padding:12px 9px;text-align:center;background:linear-gradient(160deg,#1b2743,#11182b)}.journal-card .card-emoji{font-size:30px}.journal-card strong{display:block;font-size:12px;margin:6px 0 3px}.journal-card small{font-size:10px;color:var(--muted)}.journal-card.common{border-color:#65738e}.journal-card.rare{border-color:#4e9cff;box-shadow:inset 0 0 18px #4e9cff0c}.journal-card.epic{border-color:#b18aff;box-shadow:inset 0 0 18px #b18aff12}.journal-card.legendary{border-color:#ffd166;box-shadow:inset 0 0 18px #ffd16616}.empty-journal{grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);border:1px dashed #354265;border-radius:12px;font-size:13px}
+@media(max-width:700px){.lobby-banner{align-items:flex-start}.wallet{padding:10px}.wallet b{font-size:20px}.store-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.journal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lobby-tools{grid-template-columns:1fr}.year-picker select{max-width:none}.lobby-button{width:100%}}
+@media(max-width:420px){.lobby-banner{flex-direction:column}.wallet{display:flex;align-items:center;gap:10px;text-align:left}.wallet b{display:inline}.wallet span{max-width:90px}}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo"><span class="logo-icon">↻</span><span>WEB TIME</span></div>
+  <div class="top-actions"><span class="pill">INTERNET THROUGH THE YEARS</span><button class="small-btn" id="resetBtn" title="Сбросить прогресс">↺ Сброс</button></div>
+</header>
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">A DIGITAL TIME-TRAVEL EVENT</div>
+      <h1>Путешествие<br>по <span>интернету</span></h1>
+      <p>Прыгай между эпохами веба. Заходи на сайты разных лет, выполняй задания, находи цифровые артефакты и открывай следующий портал. Сможешь добраться до будущего?</p>
+    </div>
+    <div class="hero-art"><div class="orbit"><div class="planet">🌐</div><div class="orbit-label">SIGNAL FOUND · 1991—2025</div></div></div>
+  </section>
+  <section class="lobby" id="lobby">
+    <div class="lobby-banner"><div><div class="lobby-kicker">MAIN HUB · YEAR 2026</div><h2>Единое лобби <span style="color:var(--cyan)">2026</span></h2><p>Отсюда отправляйся в любую открытую эпоху, покупай кейсы и собирай карточки сайтов в свой журнал путешественника.</p></div><div class="wallet"><b>◈ <span id="coinBalance">500</span></b><span>WEB COINS</span></div></div>
+    <div class="lobby-body"><div class="lobby-tools"><div class="year-picker"><label for="yearSelect">ВЫБЕРИ ГОД ДЛЯ ПУТЕШЕСТВИЯ</label><select id="yearSelect"></select></div><button class="lobby-button" id="travelBtn">Войти в эпоху →</button></div>
+    <div class="secret-quests"><div class="journal-head"><h3>🕵️ Секретные квесты</h3><span class="journal-count" id="secretCount">0 / 3 найдено</span></div><p style="color:var(--muted);font-size:12px;margin:7px 0 0">Некоторые задания не показывают решение. Исследуй лобби и эпохи внимательно…</p><div class="secret-list" id="secretQuestList"></div></div><div class="lobby-section-title"><h3>🎁 Магазин кейсов</h3><span>Открой кейс и получи карточку в журнал</span></div><div class="store-grid" id="caseShop"></div>
+    <div class="lobby-section-title"><h3>🛍️ Предметы коллекционера</h3><span>Покупай карточки напрямую</span></div><div class="store-grid" id="itemShop"></div>
+    <div class="journal"><div class="journal-head"><h3>📔 Журнал путешественника</h3><span class="journal-count" id="journalCount">0 карточек</span></div><div class="journal-grid" id="journalGrid"></div></div></div>
+  </section>
+
+  <section class="stats" aria-label="Статистика">
+    <div class="stat"><b id="completedStat">0 / 8</b><span>Эпох пройдено</span></div>
+    <div class="stat"><b id="artifactStat">0</b><span>Артефактов найдено</span></div>
+    <div class="stat"><b id="nextStat">1991</b><span>Следующий портал</span></div>
+  </section>
+  <div class="section-head">
+    <div><h2>Хронология интернета</h2><p>Каждая эпоха — отдельный сайт и маленькая миссия.</p></div>
+    <div class="progress-wrap"><div class="progress-label"><span>ОБЩИЙ ПРОГРЕСС</span><span id="progressText">0%</span></div><div class="progress"><div id="progressBar"></div></div></div>
+  </div>
+  <section class="timeline" id="timeline"></section>
+  <section class="quest-note"><div class="bulb">💡</div><div><strong>Как это работает</strong><p>Открывай эпохи по порядку, выполняй простые задания внутри стилизованных демо-сайтов и собирай значки. Прогресс сохраняется в этом браузере. Это интерактивная фанатская симуляция, а не архив настоящих сайтов.</p></div></section>
+</main>
+<footer>WEB TIME · фанатский интерактивный проект · все эпохи и сайты здесь — стилизованные симуляции</footer>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal-head"><strong id="modalTitle">ПОРТАЛ</strong><button class="close" id="closeModal">Закрыть ✕</button></div>
+    <div class="browser"><div class="browserbar"><span class="dots"><i></i><i></i><i></i></span><div class="address" id="address">http://old-web.example</div><span>⋮</span></div><div class="site-content" id="siteContent"></div></div>
+    <div class="quest-box"><h3 id="questTitle">Задание</h3><p id="questDescription"></p><div class="quest-actions" id="questActions"></div><div class="tiny" id="questHint">Выполни задание, чтобы открыть следующую эпоху.</div></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const eras=[
+ {year:1991,title:"Самый первый веб",name:"World Wide Web",emoji:"🧾",desc:"Простой текст, ссылки и первые страницы без привычного дизайна.",host:"info.cern.ch",theme:"site-1991",siteTitle:"Welcome to the World Wide Web",siteText:"Это ранняя веб-страница. Интернет ещё совсем молодой: здесь важны текст, ссылки и любопытство.",quest:"Найди первую ссылку",task:"Нажми на единственную синюю ссылку, чтобы открыть справочник.",buttons:["Открыть справочник"],reward:"Первый гипертекст"},
+ {year:1996,title:"Яркий веб 90-х",name:"GeoCities-style Page",emoji:"💾",desc:"Яркие фоны, мигающие надписи, гостевые книги и GIF-ки.",host:"welcome.to/my-homepage",theme:"site-1996",siteTitle:"★ WELCOME TO MY CYBER HOME ★",siteText:"Добро пожаловать на мою домашнюю страничку! Не забудь оставить сообщение в гостевой книге!",quest:"Оставь приветствие",task:"Выбери приветствие в гостевой книге.",buttons:["HELLO WEB!","COOL SITE!","I WAS HERE!"],reward:"Пиксельная звезда"},
+ {year:2000,title:"Порталы и каталоги",name:"The Web Directory",emoji:"🗂️",desc:"Каталоги ссылок, поисковые строки и ранние веб-порталы.",host:"search.example.com",theme:"site-2000",siteTitle:"WEB DIRECTORY",siteText:"Найди нужную страницу в огромном каталоге. Подсказка: ищи раздел с музыкой.",quest:"Найди раздел Music",task:"Выбери правильную категорию каталога.",buttons:["Sports","Music","Weather"],reward:"Значок искателя"},
+ {year:2005,title:"Блоги и сообщества",name:"My Blog",emoji:"✍️",desc:"Личные блоги, комментарии и первые большие онлайн-сообщества.",host:"myblog.example.net",theme:"site-2005",siteTitle:"my little corner of the web",siteText:"Сегодня я нашёл что-то интересное и хочу поделиться этим с интернетом. Что ты оставишь в комментариях?",quest:"Напиши комментарий",task:"Выбери комментарий, который подходит к записи.",buttons:["Классная запись!","Первый!","До встречи в сети"],reward:"Блогерская кнопка"},
+ {year:2010,title:"Видео и соцсети",name:"Video Hub",emoji:"▶️",desc:"Ленты видео, лайки, каналы и расцвет социальных платформ.",host:"video.example.com",theme:"site-2010",siteTitle:"Video Hub",siteText:"Ты попал на старую видеоплатформу. Посмотри, какой ролик стал популярным сегодня.",quest:"Поставь лайк",task:"Нажми кнопку лайка под видео.",buttons:["👍 Нравится","💬 Комментарии","↗ Поделиться"],reward:"Ретро-лайк"},
+ {year:2015,title:"Мобильный веб",name:"Social Feed",emoji:"📱",desc:"Карточки, фотографии, лента обновлений и сайты для смартфонов.",host:"feed.example.social",theme:"site-2015",siteTitle:"Твоя лента",siteText:"Друзья делятся новостями и фотографиями. Отметь публикацию, которую хочешь сохранить.",quest:"Сохрани публикацию",task:"Нажми на закладку у карточки.",buttons:["♡ Нравится","▣ Сохранить","↗ Поделиться"],reward:"Цифровая закладка"},
+ {year:2020,title:"Веб во время перемен",name:"Remote World",emoji:"💻",desc:"Онлайн-встречи, совместная работа и цифровые пространства.",host:"workspace.example.app",theme:"site-2020",siteTitle:"Вместе — даже онлайн",siteText:"Команда готовит виртуальную выставку. Помоги ей выбрать следующий шаг.",quest:"Выбери план команды",task:"Как лучше подготовить онлайн-выставку?",buttons:["Создать общий план","Работать без связи","Удалить проект"],reward:"Значок команды"},
+ {year:2025,title:"Современный веб",name:"The Creator Space",emoji:"✨",desc:"Интерактивные приложения, умные инструменты и персональные пространства.",host:"creator.example.ai",theme:"site-2025",siteTitle:"Создай что-то новое",siteText:"Добро пожаловать в цифровую студию. Последняя миссия — собрать собственный сигнал будущего.",quest:"Активируй финальный сигнал",task:"Выбери три фрагмента сигнала в правильной последовательности: идея → код → запуск.",buttons:["💡 Идея","⌘ Код","🚀 Запуск"],reward:"Хранитель веб-времени"}
+];
+const defaultState={completed:[],artifacts:[],coins:500,journal:[],secretQuests:[]};
+let state=loadState(),current=null,signalStep=0;
+function loadState(){try{const old=JSON.parse(localStorage.getItem("webtime_state_v1")||"{}");return {...defaultState,...old,completed:Array.isArray(old.completed)?old.completed:[],artifacts:Array.isArray(old.artifacts)?old.artifacts:[],journal:Array.isArray(old.journal)?old.journal:[],secretQuests:Array.isArray(old.secretQuests)?old.secretQuests:[],coins:Number.isFinite(old.coins)?old.coins:500}}catch(e){return {...defaultState,completed:[],artifacts:[],journal:[],secretQuests:[]}}}
+function saveState(){try{localStorage.setItem("webtime_state_v1",JSON.stringify(state))}catch(e){}}
+function unlocked(i){return i===0||state.completed.includes(eras[i-1].year)}
+function render(){
+ const root=document.getElementById("timeline");root.innerHTML="";
+ eras.forEach((era,i)=>{
+  const done=state.completed.includes(era.year),open=unlocked(i);
+  const card=document.createElement("article");card.className="era"+(!open?" locked":"");
+  card.innerHTML=`<div class="era-top"><div class="year">${era.year}</div><span class="status">${done?"✓ ПРОЙДЕНО":open?"● ОТКРЫТО":"🔒 ЗАКРЫТО"}</span></div><div class="era-art">${era.emoji}</div><h3>${era.title}</h3><p>${era.desc}</p><button class="enter" ${open?"":"disabled"}>${done?"Повторить эпоху":open?"Войти в портал →":"Сначала предыдущая эпоха"}</button>`;
+  card.querySelector("button").addEventListener("click",()=>openEra(i));root.appendChild(card);
+ });
+ const count=state.completed.length,art=state.artifacts.length,percent=Math.round(count/eras.length*100);
+ document.getElementById("completedStat").textContent=`${count} / ${eras.length}`;
+ document.getElementById("artifactStat").textContent=art;
+ document.getElementById("nextStat").textContent=eras.find(e=>!state.completed.includes(e.year))?.year||"∞";
+ document.getElementById("progressText").textContent=percent+"%";
+ document.getElementById("progressBar").style.width=percent+"%";
+ renderLobby();
+}
+
+const storeCases=[
+ {id:"retro",name:"Кейс Retro Web",icon:"💾",price:120,desc:"Старые страницы, пиксели и интернет-ностальгия.",pool:[["Пиксельный курсор","🖱️","Common"],["Гостевая книга","📒","Common"],["GIF-баннер","🌈","Rare"],["Золотая дискета","💽","Epic"]]},
+ {id:"social",name:"Кейс Social Era",icon:"📱",price:220,desc:"Артефакты эпохи блогов, видео и соцсетей.",pool:[["Старая камера","📷","Common"],["Видео-значок","▶️","Common"],["Синяя галочка","☑️","Rare"],["Золотой смартфон","📱","Legendary"]]},
+ {id:"future",name:"Кейс Future Signal",icon:"🛸",price:400,desc:"Редкие цифровые объекты из будущего веба.",pool:[["Кристалл данных","💠","Rare"],["Голографическая карта","🗺️","Epic"],["Квантовый ключ","🗝️","Epic"],["Сигнал 2026","🌌","Legendary"]]}
+];
+const directItems=[{id:"sticker",name:"Стикер WWW",icon:"🌐",price:80,desc:"Коллекционная карточка для журнала.",card:["Стикер WWW","🌐","Common"]},{id:"modem",name:"Модем 56K",icon:"📟",price:150,desc:"Звук подключения к раннему интернету.",card:["Модем 56K","📟","Rare"]},{id:"portal",name:"Портал 2026",icon:"🌀",price:300,desc:"Необычная карточка современного лобби.",card:["Портал 2026","🌀","Epic"]}];
+const secretQuestData=[
+ {id:"logo",name:"Повторяющийся сигнал",hint:"Нажми на логотип WEB TIME пять раз.",reward:150,card:["Секретный сигнал","📡","Epic"]},
+ {id:"planet",name:"Космический наблюдатель",hint:"Найди кое-что кликабельное в иллюстрации главного экрана…",reward:200,card:["Планета-портал","🪐","Epic"]},
+ {id:"allYears",name:"Хранитель времени",hint:"Пройди все восемь эпох интернета.",reward:500,card:["Ключ хрононавта","🗝️","Legendary"]}
+];
+function completeSecret(id){if(state.secretQuests.includes(id))return;const q=secretQuestData.find(x=>x.id===id);if(!q)return;state.secretQuests.push(id);state.coins+=q.reward;addJournalCard(q.card);saveState();render();toast(`🕵️ Секретный квест: ${q.name}! +${q.reward} WEB COINS и карточка!`)}
+function checkSecretQuests(){if(state.completed.length===eras.length)completeSecret("allYears")}
+let logoClicks=0,planetClicks=0;
+function renderLobby(){
+ const balance=document.getElementById("coinBalance");if(!balance)return;balance.textContent=state.coins.toLocaleString("ru-RU");
+ const selector=document.getElementById("yearSelect");if(selector&&!selector.dataset.ready){eras.forEach((e,i)=>{const opt=document.createElement("option");opt.value=String(i);opt.textContent=`${e.year} — ${e.title}`;selector.appendChild(opt)});selector.dataset.ready="1"}
+ const cases=document.getElementById("caseShop");cases.innerHTML="";storeCases.forEach(c=>{const el=document.createElement("article");el.className="store-card";el.innerHTML=`<div class="store-icon">${c.icon}</div><h4>${c.name}</h4><p>${c.desc}</p><div class="price-row"><span class="price">◈ ${c.price}</span><button class="buy-btn">Открыть</button></div>`;const btn=el.querySelector("button");btn.disabled=state.coins<c.price;btn.addEventListener("click",()=>buyCase(c));cases.appendChild(el)});
+ const items=document.getElementById("itemShop");items.innerHTML="";directItems.forEach(item=>{const el=document.createElement("article");el.className="store-card";el.innerHTML=`<div class="store-icon">${item.icon}</div><h4>${item.name}</h4><p>${item.desc}</p><div class="price-row"><span class="price">◈ ${item.price}</span><button class="buy-btn">Купить</button></div>`;const btn=el.querySelector("button");btn.disabled=state.coins<item.price;btn.addEventListener("click",()=>buyDirect(item));items.appendChild(el)});
+ const secretList=document.getElementById("secretQuestList");if(secretList){secretList.innerHTML="";document.getElementById("secretCount").textContent=`${state.secretQuests.length} / ${secretQuestData.length} найдено`;secretQuestData.forEach(q=>{const found=state.secretQuests.includes(q.id),el=document.createElement("article");el.className="secret-card"+(found?" found":"");el.innerHTML=`<strong>${found?"✅ ":"🔒 "}${found?q.name:"??? Секретное задание"}</strong><p>${found?q.hint:"Подсказка скрыта, пока секрет не раскрыт."}</p><div class="secret-status">${found?`ВЫПОЛНЕНО · +${q.reward} COINS`:"НЕ РАСКРЫТО"}</div>`;secretList.appendChild(el)})}
+ const grid=document.getElementById("journalGrid");grid.innerHTML="";document.getElementById("journalCount").textContent=`${state.journal.length} ${state.journal.length===1?"карточка":state.journal.length>=2&&state.journal.length<=4?"карточки":"карточек"}`;
+ if(!state.journal.length){grid.innerHTML='<div class="empty-journal">Пока пусто. Открой первый кейс или купи карточку, чтобы начать коллекцию!</div>';return}
+ state.journal.slice().reverse().forEach(card=>{const el=document.createElement("div");el.className="journal-card "+card.rarity.toLowerCase();el.innerHTML=`<div class="card-emoji">${card.icon}</div><strong>${card.name}</strong><small>${card.rarity} · ${card.year||"2026"}</small>`;grid.appendChild(el)});
+}
+function addJournalCard(card){state.journal.push({name:card[0],icon:card[1],rarity:card[2],year:2026,serial:Date.now()+Math.random()})}
+function buyCase(c){if(state.coins<c.price){toast("Не хватает WEB COINS!");return}state.coins-=c.price;const drop=c.pool[Math.floor(Math.random()*c.pool.length)];addJournalCard(drop);saveState();render();toast(`Кейс открыт: ${drop[1]} ${drop[0]} (${drop[2]}) добавлен в журнал!`)}
+function buyDirect(item){if(state.coins<item.price){toast("Не хватает WEB COINS!");return}state.coins-=item.price;addJournalCard(item.card);saveState();render();toast(`Получена карточка «${item.card[0]}»!`)}
+document.getElementById("travelBtn").addEventListener("click",()=>{const i=Number(document.getElementById("yearSelect").value);if(!Number.isInteger(i)||!eras[i])return;if(!unlocked(i)){toast("Этот год пока закрыт — пройди предыдущую эпоху!");return}openEra(i)});
+
+function openEra(i){
+ if(!unlocked(i))return;current=i;signalStep=0;const e=eras[i];
+ document.getElementById("modalTitle").textContent=`ПОРТАЛ ${e.year} · ${e.name.toUpperCase()}`;
+ document.getElementById("address").textContent="http://"+e.host;
+ const site=document.getElementById("siteContent");site.className="site-content "+e.theme;
+ let extra="";
+ if(e.year===1991)extra=`<p><a href="#" data-task="0">About the World Wide Web</a></p>`;
+ if(e.year===1996)extra=`<div class="retro-box"><marquee>WELCOME WEB TRAVELER ★ BEST VIEWED WITH CURIOSITY ★</marquee><p>Visitor number: 000042</p></div>`;
+ if(e.year===2000)extra=`<div class="retro-box"><b>Browse categories</b><p>Computers　Culture　Music　News</p></div>`;
+ if(e.year===2005)extra=`<div class="retro-box"><b>Post of the day</b><p>Why I love discovering new websites</p><small>0 comments · Add your thoughts below</small></div>`;
+ if(e.year===2010)extra=`<div class="retro-box"><b>▶ The internet in 2010</b><p>Views: 1,204,003　　☆ ☆ ☆ ☆ ☆</p></div>`;
+ if(e.year===2015)extra=`<div class="retro-box"><b>Today’s memory</b><p>🌄 A photo from a place you’ve never seen.</p></div>`;
+ if(e.year===2020)extra=`<div class="retro-box"><b>Team workspace</b><p>● 4 members online　·　Exhibition planning</p></div>`;
+ if(e.year===2025)extra=`<div class="retro-box"><b>CREATOR SPACE / SIGNAL BUILDER</b><p>Three fragments. One future.</p><div id="signalStatus">Signal fragments: 0 / 3</div></div>`;
+ site.innerHTML=`<h2>${e.siteTitle}</h2><p>${e.siteText}</p>${extra}`;
+ document.getElementById("questTitle").textContent="Миссия: "+e.quest;
+ document.getElementById("questDescription").textContent=e.task;
+ document.getElementById("questHint").textContent=state.completed.includes(e.year)?"Эта эпоха уже пройдена. Можешь повторить задание.":"Выполни задание, чтобы получить артефакт и открыть следующий портал.";
+ const actions=document.getElementById("questActions");actions.innerHTML="";
+ e.buttons.forEach((label,j)=>{const b=document.createElement("button");b.textContent=label;b.addEventListener("click",()=>doTask(i,j,b));actions.appendChild(b)});
+ if(e.year===1991){const a=site.querySelector("[data-task]");if(a)a.addEventListener("click",ev=>{ev.preventDefault();doTask(i,0,actions.children[0])})}
+ document.getElementById("overlay").classList.add("show");
+}
+function doTask(i,j,button){
+ const e=eras[i];let success=true;
+ if(e.year===2000)success=j===1;
+ if(e.year===2020)success=j===0;
+ if(e.year===2025){success=j===signalStep;if(success){signalStep++;const status=document.getElementById("signalStatus");if(status)status.textContent=`Signal fragments: ${signalStep} / 3`;if(signalStep<3){toast(["Отлично! Теперь добавь код.","Код готов! Осталось запустить.",""][signalStep-1]||"Фрагмент собран");return}}}
+ if(!success){toast("Не тот вариант — попробуй ещё раз!");return}
+ if(!state.completed.includes(e.year)){
+  state.completed.push(e.year);state.completed.sort((a,b)=>a-b);
+  if(!state.artifacts.includes(e.reward))state.artifacts.push(e.reward);
+  saveState();render();document.getElementById("questHint").textContent=`Эпоха ${e.year} пройдена! Получен артефакт: ${e.reward}.`;
+  [...document.querySelectorAll("#questActions button")].forEach(b=>b.disabled=true);
+  button.classList.add("done");button.textContent="✓ Миссия выполнена";
+  toast(`Эпоха ${e.year} пройдена! Получен артефакт: ${e.reward}`);
+  if(state.completed.length===eras.length)setTimeout(()=>toast("🏆 Ты прошёл все эпохи! Ты — хранитель веб-времени!"),700);
+  checkSecretQuests();
+ }else{toast("Эта эпоха уже пройдена — артефакт сохранён!")}
+}
+function closeModal(){document.getElementById("overlay").classList.remove("show");current=null}
+document.getElementById("closeModal").addEventListener("click",closeModal);
+document.getElementById("overlay").addEventListener("click",e=>{if(e.target.id==="overlay")closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+document.querySelector(".logo").addEventListener("click",()=>{logoClicks++;if(logoClicks===5){completeSecret("logo");logoClicks=0}else if(logoClicks<5)toast(`Сигнал логотипа: ${logoClicks}/5`) });
+document.querySelector(".planet").addEventListener("click",()=>{planetClicks++;if(planetClicks>=3){completeSecret("planet");planetClicks=0}else toast(`Планета странно мерцает… ${planetClicks}/3`)});
+document.getElementById("resetBtn").addEventListener("click",()=>{if(confirm("Сбросить весь прогресс WEB TIME?")){state={completed:[],artifacts:[],coins:500,journal:[],secretQuests:[]};saveState();render();closeModal();toast("Прогресс сброшен")}});
+let toastTimer;function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2600)}
+render();
+</script>
+</body>
+</html>
